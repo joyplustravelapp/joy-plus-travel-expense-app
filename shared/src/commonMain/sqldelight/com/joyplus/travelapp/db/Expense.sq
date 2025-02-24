@@ -1,0 +1,55 @@
+-- Expense table definition
+CREATE TABLE Expense (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    amount REAL NOT NULL,
+    currency TEXT NOT NULL,
+    category TEXT NOT NULL, -- stored as string representation of ExpenseCategory enum
+    description TEXT NOT NULL,
+    date TEXT NOT NULL, -- stored as ISO date format
+    tripId INTEGER NOT NULL,
+    isReimbursable INTEGER NOT NULL DEFAULT 0, -- boolean stored as 0/1
+    receiptPath TEXT,
+    paymentMethod TEXT,
+    location TEXT,
+    FOREIGN KEY (tripId) REFERENCES Trip(id) ON DELETE CASCADE
+);
+
+-- Queries
+insertExpense:
+INSERT INTO Expense(amount, currency, category, description, date, tripId, isReimbursable, receiptPath, paymentMethod, location)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateExpense:
+UPDATE Expense 
+SET amount = ?, currency = ?, category = ?, description = ?, date = ?, tripId = ?, isReimbursable = ?, receiptPath = ?, paymentMethod = ?, location = ?
+WHERE id = ?;
+
+deleteExpense:
+DELETE FROM Expense WHERE id = ?;
+
+selectAll:
+SELECT * FROM Expense ORDER BY date DESC;
+
+selectById:
+SELECT * FROM Expense WHERE id = ?;
+
+selectByTripId:
+SELECT * FROM Expense WHERE tripId = ? ORDER BY date DESC;
+
+selectByCategory:
+SELECT * FROM Expense WHERE category = ? ORDER BY date DESC;
+
+selectByDateRange:
+SELECT * FROM Expense 
+WHERE date BETWEEN ? AND ?
+ORDER BY date DESC;
+
+getTotalByTrip:
+SELECT SUM(amount) as total FROM Expense WHERE tripId = ? AND currency = ?;
+
+getCategoryTotalByTrip:
+SELECT category, SUM(amount) as total 
+FROM Expense 
+WHERE tripId = ? AND currency = ?
+GROUP BY category
+ORDER BY total DESC;
