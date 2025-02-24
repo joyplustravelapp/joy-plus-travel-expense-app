@@ -42,6 +42,9 @@ fun TripsScreen(
 ) {
     var showAddTripDialog by remember { mutableStateOf(false) }
     
+    // Collect trips as state
+    val trips by tripRepository.getAllTrips().collectAsState(initial = emptyList())
+    
     Scaffold(
         topBar = {
             TopAppBar(
@@ -65,22 +68,44 @@ fun TripsScreen(
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
-            // Temporary implementation - will be replaced with actual trip list
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Trip Screen",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Coming soon!",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            if (trips.isEmpty()) {
+                // Show empty state when no trips exist
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "No Trips Yet",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Use the + button to create a new trip!",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            } else {
+                // TODO: Replace with actual trip list when we implement UI components
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "You have ${trips.size} trips",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Trip list coming soon!",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
         }
     }
     
-    // TODO: Implement AddTripDialog when showAddTripDialog is true
+    // Show add trip dialog when the state is true
+    if (showAddTripDialog) {
+        AddTripDialog(
+            onDismiss = { showAddTripDialog = false }
+        )
+    }
 }
