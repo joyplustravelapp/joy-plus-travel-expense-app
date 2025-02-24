@@ -74,12 +74,17 @@ fun ExpensesScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Coming soon!",
+                    text = "Use the + button to add a new expense!",
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
     }
     
-    // TODO: Implement AddExpenseDialog when showAddExpenseDialog is true
+    // Show add expense dialog when the state is true
+    if (showAddExpenseDialog) {
+        AddExpenseDialog(
+            onDismiss = { showAddExpenseDialog = false }
+        )
+    }
 }
