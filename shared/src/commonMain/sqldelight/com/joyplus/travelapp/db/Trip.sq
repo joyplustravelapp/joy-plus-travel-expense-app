@@ -1,0 +1,35 @@
+-- Trip table definition
+CREATE TABLE Trip (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    destination TEXT NOT NULL,
+    startDate TEXT NOT NULL, -- stored as ISO date format
+    endDate TEXT NOT NULL, -- stored as ISO date format
+    budget REAL,
+    budgetCurrency TEXT,
+    notes TEXT
+);
+
+-- Queries
+insertTrip:
+INSERT INTO Trip(name, destination, startDate, endDate, budget, budgetCurrency, notes)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+updateTrip:
+UPDATE Trip 
+SET name = ?, destination = ?, startDate = ?, endDate = ?, budget = ?, budgetCurrency = ?, notes = ?
+WHERE id = ?;
+
+deleteTrip:
+DELETE FROM Trip WHERE id = ?;
+
+selectAll:
+SELECT * FROM Trip ORDER BY startDate DESC;
+
+selectById:
+SELECT * FROM Trip WHERE id = ?;
+
+selectActive:
+SELECT * FROM Trip 
+WHERE date('now') BETWEEN startDate AND endDate
+ORDER BY startDate;
